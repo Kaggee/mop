@@ -3,7 +3,7 @@
 	"prepullActions": [],
 	"priorityList": [
 		{"action":{"condition":{"cmp":{"op":"OpLe","lhs":{"auraRemainingTime":{"sourceUnit":{"type":"CurrentTarget"},"auraId":{"spellId":125359}}},"rhs":{"const":{"val":"3s"}}}},"castSpell":{"spellId":{"spellId":100787}}}},
-		{"action":{"condition":{"cmp":{"op":"OpGe","lhs":{"monkCurrentChi":{}},"rhs":{"const":{"val":"2"}}}},"castSpell":{"spellId":{"spellId":100784}}}},
+		{"action":{"condition":{"cmp":{"op":"OpGe","lhs":{"monkCurrentChi":{}},"rhs":{"const":{"val":"2"}}}},"castSpell":{"spellId":{"spellId":100784,"tag":1}}}},
 		{"action":{"castSpell":{"spellId":{"spellId":100780}}}}
 	]
 }
