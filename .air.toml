@@ -1,0 +1,39 @@
+# Air config for the wowsims-mop dev server.
+#
+# Why this file exists: in air 1.65.x the `-build.bin` CLI flag is deprecated
+# and (despite still being documented) gets silently dropped, so the makefile's
+# `-build.bin "./wowsimmop"` falls back to air's built-in default of
+# `./tmp/main`, which doesn't exist in this repo. Result: "running... not
+# found / Process Exit with Code: 127" right after a successful Go build.
+#
+# This config is read automatically by air on startup and overrides the CLI.
+# Values mirror what the makefile is trying to set in the `devmode` /
+# `rundevserver` targets (sim/web/main.go cli args, exclude dirs, etc.).
+
+root = "."
+tmp_dir = "/tmp"
+
+[build]
+  cmd = "make devserver"
+  entrypoint = ["./wowsimmop", "--usefs=true", "--launch=false", "--wasm=false"]
+  include_ext = ["go", "proto"]
+  exclude_dir = ["assets", "dist", "node_modules", "ui", "tools"]
+  exclude_regex = ["_test.go"]
+  exclude_unchanged = false
+  follow_symlink = false
+  delay = 1000
+  stop_on_error = false
+  send_interrupt = false
+  kill_delay = "0s"
+
+[log]
+  time = false
+
+[color]
+  main = "magenta"
+  watcher = "cyan"
+  build = "yellow"
+  runner = "green"
+
+[misc]
+  clean_on_exit = false
