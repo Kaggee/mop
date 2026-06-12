@@ -65,6 +65,11 @@ func (fw *FistweaverMonk) ApplyTalents() {
 }
 
 func (fw *FistweaverMonk) Reset(sim *core.Simulation) {
+	// Force WiseSerpent stance at sim t=0. The aura's BuildPhase=Base
+	// activation only fires during stat measurement and is then cleared,
+	// leaving monk.Stance == StanceNone by sim time. Setting it here makes
+	// the parent Monk.Reset's ChangeStance hit the WiseSerpent case.
+	fw.Stance = monk.WiseSerpent
 	fw.Monk.Reset(sim)
 }
 
