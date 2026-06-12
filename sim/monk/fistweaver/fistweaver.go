@@ -70,6 +70,7 @@ func (fw *FistweaverMonk) Reset(sim *core.Simulation) {
 
 func (fw *FistweaverMonk) RegisterSpecializationEffects() {
 	fw.RegisterMastery()
+	fw.registerTeachingsOfTheMonastery()
 }
 
 // RegisterMastery is a stub. Fistweaver isn't a real Blizzard spec and has no
