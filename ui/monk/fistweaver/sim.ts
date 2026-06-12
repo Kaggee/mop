@@ -89,7 +89,23 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFistweaverMonk, {
 	},
 
 	playerIconInputs: [],
-	includeBuffDebuffInputs: [BuffDebuffInputs.CritBuff, BuffDebuffInputs.MajorArmorDebuff],
+	// Force-include buff/debuff inputs the framework hides because they're
+	// gated on epStats containing AttackPower (our caster-leaning epStats
+	// excludes it). Fistweaver AAs and physical specials genuinely benefit.
+	// AttackPowerBuff (Horn of Winter etc.) intentionally NOT included --
+	// Wise Serpent's "no other AP sources benefit" rule means flat AP buffs
+	// don't help us.
+	includeBuffDebuffInputs: [
+		BuffDebuffInputs.CritBuff,
+		BuffDebuffInputs.MajorArmorDebuff,
+		BuffDebuffInputs.AttackSpeedBuff,
+		BuffDebuffInputs.Skullbanner,
+		BuffDebuffInputs.StormLashTotem,
+		BuffDebuffInputs.TricksOfTheTrade,
+		BuffDebuffInputs.UnholyFrenzy,
+		BuffDebuffInputs.ShatteringThrow,
+		BuffDebuffInputs.PhysicalDamageDebuff,
+	],
 	excludeBuffDebuffInputs: [],
 	otherInputs: {
 		inputs: [OtherInputs.InFrontOfTarget, OtherInputs.InputDelay],
@@ -101,15 +117,14 @@ const SPEC_CONFIG = registerSpecConfig(Spec.SpecFistweaverMonk, {
 	presets: {
 		epWeights: [Presets.DEFAULT_EP_PRESET],
 		talents: [Presets.DefaultTalents],
-		// Phase 1: simplest rotation - just hit Jab to generate Chi, spend on
-		// Blackout Kick / Tiger Palm. Defined in presets so the user can quickly
-		// load it and tweak.
-		rotations: [Presets.SIMPLE_ROTATION_PRESET],
+		// AA-only is the autoRotation default during Phase 2 verification.
+		// Switch the user-facing default to 'Simple' once tuning settles.
+		rotations: [Presets.AA_ONLY_ROTATION_PRESET, Presets.JAB_TP_ROTATION_PRESET, Presets.FULL_DPS_ROTATION_PRESET, Presets.SIMPLE_ROTATION_PRESET],
 		gear: [Presets.PREBIS_GEAR_PRESET],
 	},
 
 	autoRotation: (_: Player<Spec.SpecFistweaverMonk>): APLRotation => {
-		return Presets.SIMPLE_ROTATION_PRESET.rotation.rotation ?? APLRotation.create();
+		return Presets.AA_ONLY_ROTATION_PRESET.rotation.rotation ?? APLRotation.create();
 	},
 
 	raidSimPresets: [

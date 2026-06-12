@@ -1,0 +1,8 @@
+{
+	"type": "TypeAPL",
+	"prepullActions": [],
+	"priorityList": [
+		{"action":{"condition":{"auraIsActive":{"auraId":{"spellId":139598}}},"castSpell":{"spellId":{"spellId":100787}}}},
+		{"action":{"castSpell":{"spellId":{"spellId":100780}}}}
+	]
+}
