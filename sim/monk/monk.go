@@ -73,11 +73,9 @@ type Monk struct {
 	ComboBreakerBlackoutKickAura *core.Aura
 	ComboBreakerTigerPalmAura    *core.Aura
 
-	// HasTeachings is set by Mistweaver / Fistweaver specs that get the
-	// Teachings of the Monastery passive. When true, Tiger Palm damage is
-	// doubled (handled via SpellMod) and Blackout Kick fans out under
-	// Stance of the Wise Serpent (primary target full damage, up to four
-	// nearby targets at 50%).
+	// Set by Mistweaver-line specs (currently only Fistweaver). Tiger Palm
+	// damage is doubled via SpellMod and Blackout Kick fans out under
+	// Stance of the Wise Serpent. See sim/monk/fistweaver/teachings.go.
 	HasTeachings bool
 
 	ChiSphereAura          *core.Aura

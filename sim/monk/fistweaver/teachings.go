@@ -5,31 +5,19 @@ import (
 	"github.com/wowsims/mop/sim/monk"
 )
 
-// Teachings of the Monastery is the Mistweaver-line passive that retunes a
-// handful of monk strikes for use while in Stance of the Wise Serpent. For
-// Fistweaver we model the two pieces that affect damage output:
+// Teachings of the Monastery (Mistweaver-line passive). For Fistweaver we
+// model the two damage-relevant pieces:
 //
-//  1. Tiger Palm deals 100% additional damage. The shared spell config keeps
-//     its 3.0 base DamageMultiplier; the SpellMod registered here doubles it
-//     at runtime so we don't have to fork the spell.
+//  1. Tiger Palm +100% damage (3.0 base -> 6.0 effective). Permanent SpellMod
+//     activated once at sim start.
+//  2. Blackout Kick gains a 4-target cleave under Wise Serpent stance.
+//     Implemented in sim/monk/blackout_kick.go, gated on monk.HasTeachings.
 //
-//  2. Blackout Kick gains a 4-target cleave when the Monk is in Wise Serpent
-//     stance. That branch is implemented inline in sim/monk/blackout_kick.go
-//     and gated on monk.HasTeachings + monk.StanceMatches(WiseSerpent); we
-//     just flip the flag here.
-//
-// Serpent's Zeal (the auto-attack -> heal piece of Teachings) is intentionally
-// not modeled yet -- Fistweaver Phase 2 only covers damage. The healing side
-// is parked alongside the broader healing follow-ups.
-//
-// Teachings is gated to Fistweaver only at this point; Mistweaver doesn't
-// currently exercise damage paths in the sim and we don't want to change its
-// observed behavior as a side effect.
+// Serpent's Zeal (auto-attack -> heal) is not modeled -- damage only.
+// Fistweaver-only; MW doesn't currently exercise these damage paths.
 func (fw *FistweaverMonk) registerTeachingsOfTheMonastery() {
 	fw.HasTeachings = true
 
-	// Tiger Palm: +100% damage. Registered as a permanent spell mod and
-	// activated once at sim start; never deactivated.
 	tigerPalmDamageMod := fw.AddDynamicMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Pct,
 		ClassMask:  monk.MonkSpellTigerPalm,

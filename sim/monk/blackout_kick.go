@@ -99,9 +99,7 @@ func (monk *Monk) registerBlackoutKick() {
 
 			spell.DealOutcome(sim, result)
 
-			// Teachings of the Monastery + Stance of the Wise Serpent: Blackout
-			// Kick fans out to up to four additional nearby targets at 50%
-			// damage. Currently only Fistweaver flips HasTeachings.
+			// Teachings + Wise Serpent: cleave to up to 4 nearby targets at 50%.
 			if monk.HasTeachings && monk.StanceMatches(WiseSerpent) {
 				addsRemaining := min(4, sim.Environment.ActiveTargetCount()-1)
 				curTarget := sim.Environment.NextActiveTargetUnit(target)
