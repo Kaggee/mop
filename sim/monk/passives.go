@@ -12,12 +12,20 @@ Tooltip:
 The Monk attunes $G himself:herself; differently depending on the weapon type.
 
 One-handed weapons / Dual-wield one-handed weapons:
-Autoattack damage increased by 40%.
+Autoattack damage increased by 40% (Windwalker / Brewmaster) or 70%
+(Mistweaver / Fistweaver).
 
 Two-handed weapons:
 Melee attack speed increased by 40%.
 */
 func (monk *Monk) registerWayOfTheMonk() {
+	// Mistweaver-line monks get a stronger 1H damage bonus than the WW/BM
+	// variant. Two-handed speed bonus is the same for everyone.
+	oneHandDamageMod := core.Ternary(
+		monk.Spec == proto.Spec_SpecMistweaverMonk || monk.Spec == proto.Spec_SpecFistweaverMonk,
+		1.7, 1.4,
+	)
+
 	aura := core.MakePermanent(monk.RegisterAura(core.Aura{
 		Label:      "Way of the Monk" + monk.Label,
 		ActionID:   core.ActionID{SpellID: 120277},
@@ -27,10 +35,10 @@ func (monk *Monk) registerWayOfTheMonk() {
 				monk.MultiplyMeleeSpeed(sim, 1.4)
 			} else {
 				if monk.MHAutoSpell != nil {
-					monk.MHAutoSpell.DamageMultiplier *= 1.4
+					monk.MHAutoSpell.DamageMultiplier *= oneHandDamageMod
 				}
 				if monk.OHAutoSpell != nil {
-					monk.OHAutoSpell.DamageMultiplier *= 1.4
+					monk.OHAutoSpell.DamageMultiplier *= oneHandDamageMod
 				}
 			}
 		},
@@ -39,10 +47,10 @@ func (monk *Monk) registerWayOfTheMonk() {
 				monk.MultiplyMeleeSpeed(sim, 1/1.4)
 			} else {
 				if monk.MHAutoSpell != nil {
-					monk.MHAutoSpell.DamageMultiplier /= 1.4
+					monk.MHAutoSpell.DamageMultiplier /= oneHandDamageMod
 				}
 				if monk.OHAutoSpell != nil {
-					monk.OHAutoSpell.DamageMultiplier /= 1.4
+					monk.OHAutoSpell.DamageMultiplier /= oneHandDamageMod
 				}
 			}
 		},
