@@ -7,18 +7,22 @@ import (
 	"github.com/wowsims/mop/sim/monk"
 )
 
-// Muscle Memory is a Mistweaver-line passive: each Jab restores 4% of the
-// monk's maximum mana and grants a buff that increases the damage of your
-// next Tiger Palm or Blackout Kick by 150%.
+// Muscle Memory is a Mistweaver-line passive: each Jab grants a 20-second
+// buff that increases the damage of your next Tiger Palm or Blackout Kick by
+// 150% and restores 4% of your maximum mana when that buff is consumed.
 //
 // Implementation notes:
 //
-//   - We trigger on CallbackOnCastComplete (not OnSpellHitDealt) so that the
-//     ordering is: spell hits target -> aura's consume runs -> proc trigger
-//     re-grants for the next cast. CallbackOnSpellHitDealt would be fine for
-//     this configuration since the trigger spell (Jab) is disjoint from the
-//     consume spells (Tiger Palm, Blackout Kick), but CastComplete is
-//     marginally tidier and matches the user-visible cast event.
+//   - The trigger spell (Jab) is disjoint from the consume spells (Tiger Palm,
+//     Blackout Kick), so trigger and consume can't fire on the same cast and
+//     there's no Activate/Deactivate ordering hazard. We use
+//     CallbackOnCastComplete on the trigger for the cleaner semantic match
+//     with the user-visible cast event.
+//
+//   - Mana restoration is tied to the consume, not the grant. If the buff
+//     times out without being used (20s without a Tiger Palm or BoK), no
+//     mana is returned -- matching the MoP tooltip wording where the 4%
+//     mana is part of the buff's effect on its consumer.
 //
 //   - The buff is consumed on the first Tiger Palm or Blackout Kick hit that
 //     lands. With the Teachings-of-the-Monastery cleave (handled in
@@ -48,6 +52,7 @@ func (fw *FistweaverMonk) registerMuscleMemory() {
 			if !spell.Matches(monk.MonkSpellTigerPalm|monk.MonkSpellBlackoutKick) || !result.Landed() {
 				return
 			}
+			fw.AddMana(sim, fw.MaxMana()*manaRestoreFraction, manaMetrics)
 			aura.Deactivate(sim)
 		},
 	}).ApplyOnGain(func(_ *core.Aura, sim *core.Simulation) {
@@ -62,7 +67,6 @@ func (fw *FistweaverMonk) registerMuscleMemory() {
 		ClassSpellMask: monk.MonkSpellJab,
 
 		Handler: func(sim *core.Simulation, spell *core.Spell, _ *core.SpellResult) {
-			fw.AddMana(sim, fw.MaxMana()*manaRestoreFraction, manaMetrics)
 			muscleMemoryAura.Activate(sim)
 		},
 	})
