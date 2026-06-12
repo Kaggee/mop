@@ -48,7 +48,13 @@ func (monk *Monk) CalculateMonkStrikeDamage(sim *core.Simulation, spell *core.Sp
 	}
 
 	oh := monk.OffHand()
-	if oh != nil && oh.WeaponType != proto.WeaponType_WeaponTypeUnknown {
+	// WeaponTypeOffHand is the "stat stick" off-hand item type used by
+	// caster-flavored Mistweavers and Fistweavers. It occupies the OH slot
+	// but isn't an actual weapon (BaseDamage = 0, SwingSpeed = 0), so we
+	// skip it here. WeaponTypeShield likewise isn't a weapon.
+	if oh != nil && oh.WeaponType != proto.WeaponType_WeaponTypeUnknown &&
+		oh.WeaponType != proto.WeaponType_WeaponTypeOffHand &&
+		oh.WeaponType != proto.WeaponType_WeaponTypeShield {
 		ohw := monk.WeaponFromOffHand(monk.DefaultCritMultiplier())
 		dmg := ohw.BaseDamage(sim) / ohw.SwingSpeed * 0.5
 		totalDamage += dmg
