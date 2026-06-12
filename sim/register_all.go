@@ -17,6 +17,7 @@ import (
 	"github.com/wowsims/mop/sim/mage/fire"
 	frostMage "github.com/wowsims/mop/sim/mage/frost"
 	"github.com/wowsims/mop/sim/monk/brewmaster"
+	"github.com/wowsims/mop/sim/monk/fistweaver"
 	"github.com/wowsims/mop/sim/monk/mistweaver"
 	"github.com/wowsims/mop/sim/monk/windwalker"
 	holyPaladin "github.com/wowsims/mop/sim/paladin/holy"
@@ -91,6 +92,7 @@ func RegisterAll() {
 	brewmaster.RegisterBrewmasterMonk()
 	mistweaver.RegisterMistweaverMonk()
 	windwalker.RegisterWindwalkerMonk()
+	fistweaver.RegisterFistweaverMonk()
 
 	common.RegisterAllEffects()
 }

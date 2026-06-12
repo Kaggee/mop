@@ -314,6 +314,7 @@ export const masterySpellIDs: Map<Spec, number> = new Map([
 	[Spec.SpecBrewmasterMonk, 117906],
 	[Spec.SpecMistweaverMonk, 117907],
 	[Spec.SpecWindwalkerMonk, 1247280],
+	[Spec.SpecFistweaverMonk, 117907],
 ]);
 export const statCapTypeNames = new Map<StatCapType, string>([
 	[StatCapType.TypeHardCap, 'Hard cap'],

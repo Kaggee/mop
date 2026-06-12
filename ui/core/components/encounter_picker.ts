@@ -128,7 +128,7 @@ export class EncounterPicker extends Component {
 					},
 					showWhen: (raid: Raid) => {
 						const shouldEnable = player.shouldEnableTargetDummies();
-						if ([Spec.SpecBrewmasterMonk, Spec.SpecWindwalkerMonk].includes(player.getSpec())) {
+						if ([Spec.SpecBrewmasterMonk, Spec.SpecWindwalkerMonk, Spec.SpecFistweaverMonk].includes(player.getSpec())) {
 							return false;
 						}
 

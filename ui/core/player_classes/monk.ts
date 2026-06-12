@@ -1,6 +1,6 @@
 import { EligibleWeaponType, IconSize, PlayerClass } from '../player_class';
 import { PlayerSpec } from '../player_spec';
-import { BrewmasterMonk, MistweaverMonk, WindwalkerMonk } from '../player_specs/monk';
+import { BrewmasterMonk, FistweaverMonk, MistweaverMonk, WindwalkerMonk } from '../player_specs/monk';
 import { ArmorType, Class, Race, RangedWeaponType, WeaponType } from '../proto/common';
 import { MonkSpecs } from '../proto_utils/utils';
 
@@ -12,6 +12,7 @@ export class Monk extends PlayerClass<Class.ClassMonk> {
 		[BrewmasterMonk.friendlyName]: BrewmasterMonk,
 		[MistweaverMonk.friendlyName]: MistweaverMonk,
 		[WindwalkerMonk.friendlyName]: WindwalkerMonk,
+		[FistweaverMonk.friendlyName]: FistweaverMonk,
 	};
 	static races: Race[] = [
 		// [A]

@@ -256,6 +256,7 @@ export class CharacterStats extends Component {
 					modifier = [0.5, ...modifier];
 					break;
 				case Spec.SpecWindwalkerMonk:
+				case Spec.SpecFistweaverMonk:
 					customBonus = [3.5, 0];
 					break;
 				case Spec.SpecBalanceDruid:

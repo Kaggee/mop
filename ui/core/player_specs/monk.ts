@@ -110,3 +110,43 @@ export class WindwalkerMonk extends PlayerSpec<Spec.SpecWindwalkerMonk> {
 		return WindwalkerMonk.getIcon(size);
 	};
 }
+
+export class FistweaverMonk extends PlayerSpec<Spec.SpecFistweaverMonk> {
+	static specIndex = 3;
+	static specID = Spec.SpecFistweaverMonk as Spec.SpecFistweaverMonk;
+	static classID = Class.ClassMonk as Class.ClassMonk;
+	static friendlyName = 'Fistweaver';
+	static simLink = getSpecSiteUrl('monk', 'fistweaver');
+
+	static isTankSpec = false;
+	static isHealingSpec = false;
+	static isRangedDpsSpec = false;
+	static isMeleeDpsSpec = true;
+
+	// Monks don't dual wield - 1H goes mainhand + offhand (separate slots),
+	// not two 1H weapons in main+offhand like rogues/warriors.
+	static canDualWield = false;
+
+	readonly specIndex = FistweaverMonk.specIndex;
+	readonly specID = FistweaverMonk.specID;
+	readonly classID = FistweaverMonk.classID;
+	readonly friendlyName = FistweaverMonk.friendlyName;
+	readonly simLink = FistweaverMonk.simLink;
+
+	readonly isTankSpec = FistweaverMonk.isTankSpec;
+	readonly isHealingSpec = FistweaverMonk.isHealingSpec;
+	readonly isRangedDpsSpec = FistweaverMonk.isRangedDpsSpec;
+	readonly isMeleeDpsSpec = FistweaverMonk.isMeleeDpsSpec;
+
+	readonly canDualWield = FistweaverMonk.canDualWield;
+
+	static getIcon = (size: IconSize): string => {
+		// Fistweaver isn't a real Blizzard spec, so we don't have a unique spec icon.
+		// Tiger Palm is the iconic Fistweaver-flavor ability, so use that.
+		return `https://wow.zamimg.com/images/wow/icons/${size}/ability_monk_tigerpalm.jpg`;
+	};
+
+	getIcon = (size: IconSize): string => {
+		return FistweaverMonk.getIcon(size);
+	};
+}

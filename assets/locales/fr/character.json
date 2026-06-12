@@ -37,7 +37,8 @@
 		"monk": {
 			"brewmaster": "Maître brasseur",
 			"mistweaver": "Tisse-brume",
-			"windwalker": "Marche-vent"
+			"windwalker": "Marche-vent",
+			"fistweaver": "Tisse-poing"
 		},
 		"paladin": {
 			"holy": "Sacré",

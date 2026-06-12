@@ -40,6 +40,7 @@ const specToPlayerSpec: Record<Spec, PlayerSpec<any> | undefined> = {
 	[Spec.SpecBrewmasterMonk]: MonkSpecs.BrewmasterMonk,
 	[Spec.SpecMistweaverMonk]: MonkSpecs.MistweaverMonk,
 	[Spec.SpecWindwalkerMonk]: MonkSpecs.WindwalkerMonk,
+	[Spec.SpecFistweaverMonk]: MonkSpecs.FistweaverMonk,
 	// Paladin
 	[Spec.SpecHolyPaladin]: PaladinSpecs.HolyPaladin,
 	[Spec.SpecProtectionPaladin]: PaladinSpecs.ProtectionPaladin,

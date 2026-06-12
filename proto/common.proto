@@ -95,6 +95,7 @@ enum Spec {
 	SpecBrewmasterMonk = 32;
 	SpecMistweaverMonk = 33;
 	SpecWindwalkerMonk = 34;
+	SpecFistweaverMonk = 35;
 }
 
 enum Race {

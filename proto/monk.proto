@@ -107,3 +107,12 @@ message WindwalkerMonk {
 	}
 	Options options = 1;
 }
+
+message FistweaverMonk {
+	message Rotation {}
+
+	message Options {
+		MonkOptions class_options = 1;
+	}
+	Options options = 1;
+}

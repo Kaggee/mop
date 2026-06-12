@@ -87,7 +87,7 @@ func (monk *Monk) registerStanceOfTheSturdyOx(stanceCD *core.Timer) {
 }
 
 func (monk *Monk) registerStanceOfTheWiseSerpent(stanceCD *core.Timer) {
-	if monk.Spec != proto.Spec_SpecMistweaverMonk {
+	if monk.Spec != proto.Spec_SpecMistweaverMonk && monk.Spec != proto.Spec_SpecFistweaverMonk {
 		return
 	}
 	actionID := core.ActionID{SpellID: 117895}
@@ -142,7 +142,7 @@ func (monk *Monk) registerStanceOfTheWiseSerpent(stanceCD *core.Timer) {
 		Label:      "Stance of the Wise Serpent" + monk.Label,
 		ActionID:   core.ActionID{SpellID: 136336},
 		Duration:   core.NeverExpires,
-		BuildPhase: core.Ternary(monk.Spec == proto.Spec_SpecMistweaverMonk, core.CharacterBuildPhaseBase, core.CharacterBuildPhaseNone),
+		BuildPhase: core.Ternary(monk.Spec == proto.Spec_SpecMistweaverMonk || monk.Spec == proto.Spec_SpecFistweaverMonk, core.CharacterBuildPhaseBase, core.CharacterBuildPhaseNone),
 		OnGain: func(aura *core.Aura, sim *core.Simulation) {
 			monk.Stance = WiseSerpent
 			monk.SetCurrentPowerBar(core.ManaBar)

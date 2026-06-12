@@ -97,6 +97,10 @@ export const simLaunchStatuses: Record<Spec, SimStatus> = {
 		phase: Phase.Phase5,
 		status: LaunchStatus.Launched,
 	},
+	[Spec.SpecFistweaverMonk]: {
+		phase: Phase.Phase1,
+		status: LaunchStatus.Alpha,
+	},
 	// Paladin
 	[Spec.SpecHolyPaladin]: {
 		phase: Phase.Phase1,

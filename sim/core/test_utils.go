@@ -412,6 +412,9 @@ func getPlayerSpecOptions(player *proto.Player) interface{} {
 	if playerSpec, ok := player.Spec.(*proto.Player_WindwalkerMonk); ok {
 		return playerSpec
 	}
+	if playerSpec, ok := player.Spec.(*proto.Player_FistweaverMonk); ok {
+		return playerSpec
+	}
 	if playerSpec, ok := player.Spec.(*proto.Player_HolyPaladin); ok {
 		return playerSpec
 	}

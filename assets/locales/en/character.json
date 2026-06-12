@@ -37,7 +37,8 @@
 		"monk": {
 			"brewmaster": "Brewmaster",
 			"mistweaver": "Mistweaver",
-			"windwalker": "Windwalker"
+			"windwalker": "Windwalker",
+			"fistweaver": "Fistweaver"
 		},
 		"paladin": {
 			"holy": "Holy",

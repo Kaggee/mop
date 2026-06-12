@@ -80,6 +80,9 @@ import {
 	BrewmasterMonk,
 	BrewmasterMonk_Options,
 	BrewmasterMonk_Rotation,
+	FistweaverMonk,
+	FistweaverMonk_Options,
+	FistweaverMonk_Rotation,
 	MistweaverMonk,
 	MistweaverMonk_Options,
 	MistweaverMonk_Rotation,
@@ -235,7 +238,7 @@ export type RogueSpecs = Spec.SpecAssassinationRogue | Spec.SpecCombatRogue | Sp
 export type ShamanSpecs = Spec.SpecElementalShaman | Spec.SpecEnhancementShaman | Spec.SpecRestorationShaman;
 export type WarlockSpecs = Spec.SpecAfflictionWarlock | Spec.SpecDemonologyWarlock | Spec.SpecDestructionWarlock;
 export type WarriorSpecs = Spec.SpecArmsWarrior | Spec.SpecFuryWarrior | Spec.SpecProtectionWarrior;
-export type MonkSpecs = Spec.SpecBrewmasterMonk | Spec.SpecMistweaverMonk | Spec.SpecWindwalkerMonk;
+export type MonkSpecs = Spec.SpecBrewmasterMonk | Spec.SpecMistweaverMonk | Spec.SpecWindwalkerMonk | Spec.SpecFistweaverMonk;
 
 export type ClassSpecs<T extends Class> = T extends Class.ClassDeathKnight
 	? DeathKnightSpecs
@@ -335,7 +338,9 @@ export type SpecRotation<T extends Spec> =
 																? MistweaverMonk_Rotation
 																: T extends Spec.SpecWindwalkerMonk
 																	? WindwalkerMonk_Rotation
-																	: // Paladin
+																	: T extends Spec.SpecFistweaverMonk
+																		? FistweaverMonk_Rotation
+																		: // Paladin
 																		T extends Spec.SpecHolyPaladin
 																		? HolyPaladin_Rotation
 																		: T extends Spec.SpecProtectionPaladin
@@ -492,7 +497,9 @@ export type SpecOptions<T extends Spec> =
 																? MistweaverMonk_Options
 																: T extends Spec.SpecWindwalkerMonk
 																	? WindwalkerMonk_Options
-																	: // Paladin
+																	: T extends Spec.SpecFistweaverMonk
+																		? FistweaverMonk_Options
+																		: // Paladin
 																		T extends Spec.SpecHolyPaladin
 																		? HolyPaladin_Options
 																		: T extends Spec.SpecProtectionPaladin
@@ -575,7 +582,9 @@ export type SpecType<T extends Spec> =
 																? MistweaverMonk
 																: T extends Spec.SpecWindwalkerMonk
 																	? WindwalkerMonk
-																	: // Paladin
+																	: T extends Spec.SpecFistweaverMonk
+																		? FistweaverMonk
+																		: // Paladin
 																		T extends Spec.SpecHolyPaladin
 																		? HolyPaladin
 																		: T extends Spec.SpecProtectionPaladin
@@ -1031,6 +1040,29 @@ export const specTypeFunctions: Record<Spec, SpecTypeFunctions<any>> = {
 			player.spec.oneofKind == 'windwalkerMonk'
 				? player.spec.windwalkerMonk.options || WindwalkerMonk_Options.create()
 				: WindwalkerMonk_Options.create({ classOptions: {} }),
+	},
+	[Spec.SpecFistweaverMonk]: {
+		rotationCreate: () => FistweaverMonk_Rotation.create(),
+		rotationEquals: (a, b) => FistweaverMonk_Rotation.equals(a as FistweaverMonk_Rotation, b as FistweaverMonk_Rotation),
+		rotationCopy: a => FistweaverMonk_Rotation.clone(a as FistweaverMonk_Rotation),
+		rotationToJson: a => FistweaverMonk_Rotation.toJson(a as FistweaverMonk_Rotation),
+		rotationFromJson: obj => FistweaverMonk_Rotation.fromJson(obj),
+
+		talentsCreate: () => MonkTalents.create(),
+		talentsEquals: (a, b) => MonkTalents.equals(a as MonkTalents, b as MonkTalents),
+		talentsCopy: a => MonkTalents.clone(a as MonkTalents),
+		talentsToJson: a => MonkTalents.toJson(a as MonkTalents),
+		talentsFromJson: obj => MonkTalents.fromJson(obj),
+
+		optionsCreate: () => FistweaverMonk_Options.create({ classOptions: {} }),
+		optionsEquals: (a, b) => FistweaverMonk_Options.equals(a as FistweaverMonk_Options, b as FistweaverMonk_Options),
+		optionsCopy: a => FistweaverMonk_Options.clone(a as FistweaverMonk_Options),
+		optionsToJson: a => FistweaverMonk_Options.toJson(a as FistweaverMonk_Options),
+		optionsFromJson: obj => FistweaverMonk_Options.fromJson(obj),
+		optionsFromPlayer: player =>
+			player.spec.oneofKind == 'fistweaverMonk'
+				? player.spec.fistweaverMonk.options || FistweaverMonk_Options.create()
+				: FistweaverMonk_Options.create({ classOptions: {} }),
 	},
 	// Paladin
 	[Spec.SpecHolyPaladin]: {
@@ -1609,6 +1641,14 @@ export function withSpec<SpecType extends Spec>(spec: Spec, player: Player, spec
 				oneofKind: 'windwalkerMonk',
 				windwalkerMonk: WindwalkerMonk.create({
 					options: specOptions as WindwalkerMonk_Options,
+				}),
+			};
+			return copy;
+		case Spec.SpecFistweaverMonk:
+			copy.spec = {
+				oneofKind: 'fistweaverMonk',
+				fistweaverMonk: FistweaverMonk.create({
+					options: specOptions as FistweaverMonk_Options,
 				}),
 			};
 			return copy;

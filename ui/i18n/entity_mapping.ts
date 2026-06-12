@@ -166,6 +166,7 @@ export const specI18nKeys: Record<Spec, string> = {
 	[Spec.SpecBrewmasterMonk]: 'brewmaster',
 	[Spec.SpecMistweaverMonk]: 'mistweaver',
 	[Spec.SpecWindwalkerMonk]: 'windwalker',
+	[Spec.SpecFistweaverMonk]: 'fistweaver',
 	// Paladin
 	[Spec.SpecHolyPaladin]: 'holy',
 	[Spec.SpecProtectionPaladin]: 'protection',
@@ -340,6 +341,7 @@ export const masterySpellNamesI18nKeys: Record<Spec, string> = {
 	[Spec.SpecBrewmasterMonk]: 'elusive_brawler',
 	[Spec.SpecMistweaverMonk]: 'gift_of_the_serpent',
 	[Spec.SpecWindwalkerMonk]: 'bottled_fury',
+	[Spec.SpecFistweaverMonk]: 'bottled_fury',
 };
 
 export const slotNamesI18nKeys: Record<ItemSlot, string> = {
