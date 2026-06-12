@@ -87,7 +87,7 @@ func tigerStrikesBuffAura(unit *core.Unit) {
 }
 
 func (monk *Monk) registerTigerStrikes() {
-	if monk.Spec != proto.Spec_SpecWindwalkerMonk {
+	if monk.Spec != proto.Spec_SpecWindwalkerMonk && monk.Spec != proto.Spec_SpecFistweaverMonk {
 		return
 	}
 
