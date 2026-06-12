@@ -96,10 +96,18 @@ func (monk *Monk) registerStanceOfTheWiseSerpent(stanceCD *core.Timer) {
 	hitDep := monk.NewDynamicStatDependency(stats.Spirit, stats.HitRating, 0.5)
 	expDep := monk.NewDynamicStatDependency(stats.Spirit, stats.ExpertiseRating, 0.5)
 	hasteDep := monk.NewDynamicMultiplyStat(stats.HasteRating, 1.5)
+	// Wise Serpent: AP = 200% of SpellPower. The framework can't go SP->AP
+	// directly (safeDepsOrder puts AP before SP), so Int*2 -> AP is the
+	// closest stat-dep approximation for the UI. Sim runtime uses the
+	// override below for exact SP*2; UI display reads short by flat-SP*2.
+	apFromIntDep := monk.NewDynamicStatDependency(stats.Intellect, stats.AttackPower, 2.0)
 
 	dmgDone := 0.0
 
 	monk.GetAttackPowerValue = func(spell *core.Spell) float64 {
+		// Wise Serpent: AP = exactly 200% of SpellPower (no other sources).
+		// UI's displayed AttackPower comes from apFromIntDep above and is
+		// approximate; this override is the source of truth at sim runtime.
 		if monk.StanceMatches(WiseSerpent) {
 			return monk.GetStat(stats.SpellPower) * 2
 		}
@@ -122,17 +130,41 @@ func (monk *Monk) registerStanceOfTheWiseSerpent(stanceCD *core.Timer) {
 		},
 	})
 
-	// When the Monk deals non-autoattack damage, he/she will heal the lowest health nearby target within 20 yards equal to 25% of the damage done.
+	// Eminence: when the Monk deals damage in Wise Serpent, heal the lowest-health
+	// nearby target within 20 yards for 25% of the damage. Auto-attacks don't
+	// normally proc Eminence -- only specials -- but Teachings of the Monastery
+	// (Mistweaver/Fistweaver passive) adds Serpent's Zeal which lets AAs trigger
+	// the heal too, and a placed Jade Serpent Statue mirrors the heal a second
+	// time. For Fistweaver we assume both Teachings and a Statue placed in
+	// range, and bake in 30% overhealing as a flat reduction; the resulting
+	// effective heal multiplier is 0.25 base * 2 (statue) * 0.7 (overheal) =
+	// 35% of damage. Mistweaver (which doesn't currently set HasTeachings) keeps
+	// its original 25%-of-non-AA-damage behavior so we don't change healer
+	// numbers as a side effect.
+	const fistweaverEminenceStatueMultiplier = 2.0
+	const fistweaverEminenceOverhealFactor = 0.7
+
 	eminenceAura := monk.RegisterAura(core.Aura{
 		Label:    "Eminence" + monk.Label,
 		ActionID: core.ActionID{SpellID: 126890},
 		Duration: core.NeverExpires,
 		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if result == nil || !result.Landed() || result.Damage == 0 || spell.ProcMask.Matches(core.ProcMaskWhiteHit) {
+			if result == nil || !result.Landed() || result.Damage == 0 {
 				return
 			}
 
-			dmgDone = result.Damage
+			isAutoAttack := spell.ProcMask.Matches(core.ProcMaskWhiteHit)
+			if isAutoAttack && !monk.HasTeachings {
+				// Without Teachings (Serpent's Zeal), AAs don't trigger Eminence.
+				return
+			}
+
+			damage := result.Damage
+			if monk.HasTeachings {
+				damage *= fistweaverEminenceStatueMultiplier * fistweaverEminenceOverhealFactor
+			}
+
+			dmgDone = damage
 			// Should be a smart heal
 			eminenceHeal.Cast(sim, &monk.Unit)
 		},
@@ -169,6 +201,8 @@ func (monk *Monk) registerStanceOfTheWiseSerpent(stanceCD *core.Timer) {
 		expDep,
 	).AttachStatDependency(
 		hasteDep,
+	).AttachStatDependency(
+		apFromIntDep,
 	)
 
 	monk.StanceOfTheWiseSerpentAura.NewExclusiveEffect(stanceEffectCategory, true, core.ExclusiveEffect{})
